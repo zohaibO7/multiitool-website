@@ -1,0 +1,918 @@
+/* ==========================================================================
+   MultiTool — assets/css/tool.css
+   --------------------------------------------------------------------------
+   SHARED tool-page stylesheet. Loaded by all 58 tool pages, alongside
+   style.css. The homepage does not need it (but loading it is harmless).
+
+   Owns: breadcrumb, tool heading block, input panels, form controls,
+         action rows, output boxes, stat grids, dropzones, alerts.
+
+   Every tool page reuses these classes. If a tool needs something truly
+   one-off, put it in that tool's own <style> block — do NOT add tool-specific
+   rules to this file, or it stops being shared.
+
+   Depends on the tokens declared in style.css. Load order matters:
+     style.css  →  tool.css
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. PAGE SHELL
+   -------------------------------------------------------------------------- */
+.tool-shell {
+  width: 100%;
+  max-width: var(--container-narrow);
+  margin-inline: auto;
+  padding-inline: var(--sp-4);
+}
+
+/* Opt-in wider shell for tools that need the room (diff checker, image
+   tools, anything with a side-by-side layout). */
+.tool-shell--wide {
+  max-width: var(--container);
+}
+
+/* --------------------------------------------------------------------------
+   2. BREADCRUMB
+   -------------------------------------------------------------------------- */
+.breadcrumb {
+  margin-bottom: var(--sp-4);
+  font-size: var(--fs-sm);
+}
+
+.breadcrumb__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.breadcrumb__list li {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  color: var(--text-faint);
+}
+
+.breadcrumb__list li + li::before {
+  content: "/";
+  color: var(--border-strong);
+}
+
+.breadcrumb a {
+  color: var(--text-muted);
+}
+
+.breadcrumb a:hover {
+  color: var(--accent);
+}
+
+.breadcrumb [aria-current="page"] {
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   3. TOOL HEADING BLOCK
+   The spec's "heading + short description" for every tool page.
+   -------------------------------------------------------------------------- */
+.tool-head {
+  margin-bottom: var(--sp-6);
+}
+
+.tool-head__top {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-3);
+}
+
+.tool-head__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  flex: none;
+  font-size: 1.7rem;
+  line-height: 1;
+  background: var(--accent-soft);
+  border-radius: var(--r-md);
+}
+
+.tool-head__title {
+  margin: 0;
+  font-size: var(--fs-2xl);
+}
+
+.tool-head__desc {
+  max-width: 66ch;
+  margin: 0;
+  font-size: var(--fs-lg);
+  line-height: var(--lh-snug);
+  color: var(--text-muted);
+}
+
+.tool-head__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin-top: var(--sp-4);
+}
+
+/* --------------------------------------------------------------------------
+   4. LAYOUT — stacked by default, opt-in two-column
+   -------------------------------------------------------------------------- */
+.tool-layout {
+  display: grid;
+  gap: var(--sp-5);
+}
+
+/* Side-by-side input/output on desktop. Collapses to stacked under 860px. */
+@media (min-width: 861px) {
+  .tool-layout--split {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   5. PANELS
+   The container for both the input side and the output side.
+   -------------------------------------------------------------------------- */
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  box-shadow: var(--sh-1);
+  overflow: hidden;
+}
+
+.panel__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+}
+
+.panel__title {
+  margin: 0;
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+/* Push trailing controls (copy, download, swap) to the right edge. */
+.panel__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-left: auto;
+}
+
+.panel__body {
+  padding: var(--sp-4);
+}
+
+.panel__body > :last-child {
+  margin-bottom: 0;
+}
+
+.panel__foot {
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--surface-2);
+  border-top: 1px solid var(--border);
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+}
+
+/* --------------------------------------------------------------------------
+   6. FORM CONTROLS
+   -------------------------------------------------------------------------- */
+.field {
+  margin-bottom: var(--sp-4);
+}
+
+.field:last-child {
+  margin-bottom: 0;
+}
+
+.field__label {
+  display: block;
+  margin-bottom: var(--sp-2);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--text);
+}
+
+.field__hint {
+  display: block;
+  margin-top: var(--sp-2);
+  font-size: var(--fs-xs);
+  color: var(--text-faint);
+}
+
+/* Multiple fields side by side. auto-fit keeps it responsive for free. */
+.field-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-4);
+}
+
+.field-row:last-child {
+  margin-bottom: 0;
+}
+
+.field-row .field {
+  margin-bottom: 0;
+}
+
+/* Shared look for every text-like control on every tool page. */
+.input,
+.textarea,
+.select {
+  width: 100%;
+  padding: var(--sp-3);
+  font-family: inherit;
+  font-size: var(--fs-base);
+  line-height: var(--lh-snug);
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-sm);
+  transition: border-color var(--t-fast) var(--ease),
+    box-shadow var(--t-fast) var(--ease);
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--text-faint);
+}
+
+.input:focus,
+.textarea:focus,
+.select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-ring);
+}
+
+.input:disabled,
+.textarea:disabled,
+.select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Flag a control that failed validation. Pair with .tool-alert--error text
+   so the failure is not communicated by colour alone. */
+.input.is-invalid,
+.textarea.is-invalid,
+.select.is-invalid {
+  border-color: var(--danger);
+}
+
+.input.is-invalid:focus,
+.textarea.is-invalid:focus,
+.select.is-invalid:focus {
+  box-shadow: 0 0 0 3px var(--danger-soft);
+}
+
+.textarea {
+  min-height: 190px;
+  resize: vertical;
+}
+
+.textarea--tall {
+  min-height: 300px;
+}
+
+.textarea--mono,
+.input--mono {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+}
+
+.select {
+  cursor: pointer;
+  /* Room for the native dropdown arrow. */
+  padding-right: var(--sp-6);
+}
+
+/* Number inputs: tabular figures so digits do not jitter while typing. */
+.input[type="number"] {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Checkbox / radio rows */
+.check {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  padding: var(--sp-2) 0;
+  font-size: var(--fs-sm);
+  cursor: pointer;
+}
+
+.check input {
+  width: 1.05em;
+  height: 1.05em;
+  flex: none;
+  margin: 0.2em 0 0;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.check__text {
+  color: var(--text);
+}
+
+.check-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: var(--sp-1) var(--sp-4);
+}
+
+/* Range slider with a live value readout */
+.range-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+}
+
+.range {
+  flex: 1;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.range-value {
+  min-width: 3.5ch;
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--accent);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* A group of related controls. Use a real <fieldset> with a <legend> so the
+   group's name is announced before its first control, then strip the browser's
+   default border, padding and legend offset so it looks like any other .field.
+   The class is required -- a bare <fieldset> keeps the UA styling. */
+.field fieldset,
+fieldset.field {
+  min-width: 0; /* Firefox gives fieldset an automatic minimum width */
+  margin: 0 0 var(--sp-4);
+  padding: 0;
+  border: 0;
+}
+
+fieldset.field:last-child {
+  margin-bottom: 0;
+}
+
+fieldset.field > legend {
+  /* A legend is not a normal block box; float + clear makes it behave like
+     one, which is the only reliable way to lay it out consistently. */
+  float: left;
+  width: 100%;
+  padding: 0;
+  margin-bottom: var(--sp-2);
+}
+
+fieldset.field > legend + * {
+  clear: both;
+}
+
+/* Mutually exclusive choices shown as a grid of buttons rather than a
+   <select>, for when there are more than about four options and the label of
+   each option is itself the preview. Used by Case Converter, Text Reverser
+   and Text Sorter.
+
+   The active state hangs off `aria-pressed="true"`, not a class. That way the
+   thing a screen reader announces and the thing a sighted user sees are the
+   same single source of truth and cannot drift apart. */
+.mode-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
+  gap: var(--sp-2);
+}
+
+.mode-btn {
+  padding: var(--sp-3);
+  font-family: inherit;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  line-height: var(--lh-snug);
+  color: var(--text);
+  text-align: left;
+  background: var(--bg);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  transition: color var(--t-fast) var(--ease),
+    border-color var(--t-fast) var(--ease),
+    background-color var(--t-fast) var(--ease);
+}
+
+.mode-btn:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.mode-btn[aria-pressed="true"] {
+  color: var(--on-accent);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+/* An example of the mode's output, shown under its name. Inherits the button
+   colour so it stays legible once the button is selected. */
+.mode-btn__eg {
+  display: block;
+  margin-top: var(--sp-1);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 400;
+  opacity: 0.75;
+}
+
+/* --------------------------------------------------------------------------
+   7. ACTION ROW
+   The spec's "button" line. Wraps cleanly on narrow screens.
+   -------------------------------------------------------------------------- */
+.tool-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  margin-top: var(--sp-4);
+}
+
+.tool-actions--end {
+  justify-content: flex-end;
+}
+
+/* Shove everything after this element to the right (e.g. a Reset button). */
+.tool-actions__spacer {
+  margin-left: auto;
+}
+
+/* --------------------------------------------------------------------------
+   8. OUTPUT
+   Always give the output element aria-live="polite" in the markup so screen
+   readers announce results. See the Word Counter page for the pattern.
+   -------------------------------------------------------------------------- */
+.output {
+  min-height: 96px;
+  padding: var(--sp-4);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  line-height: var(--lh-base);
+  /* Preserve the author's line breaks and spacing, but still wrap. */
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  overflow-x: auto;
+}
+
+.output--mono {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+}
+
+.output--tall {
+  max-height: 460px;
+  overflow-y: auto;
+}
+
+.output--center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* Shown until the tool has produced anything. */
+.output__placeholder {
+  color: var(--text-faint);
+  font-style: italic;
+}
+
+/* --------------------------------------------------------------------------
+   9. STAT GRID
+   Used by the Word Counter and any tool reporting several numbers at once.
+   -------------------------------------------------------------------------- */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: var(--sp-3);
+}
+
+.stat {
+  padding: var(--sp-4) var(--sp-3);
+  text-align: center;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  transition: border-color var(--t-fast) var(--ease);
+}
+
+.stat:hover {
+  border-color: var(--accent);
+}
+
+.stat__value {
+  display: block;
+  font-size: var(--fs-2xl);
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.stat__label {
+  display: block;
+  margin-top: var(--sp-2);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+/* A quieter variant for secondary figures. */
+.stat--muted .stat__value {
+  color: var(--text);
+  font-size: var(--fs-xl);
+}
+
+/* --------------------------------------------------------------------------
+   10. DATA TABLE
+   A ranked list of rows, with an optional proportion bar. Introduced for the
+   Word Frequency Counter and kept here rather than on that page, because
+   every later tool that reports rows instead of a block of text needs it.
+   -------------------------------------------------------------------------- */
+
+/* The scroll container. The table itself must not carry the border, or the
+   sticky header would scroll out from underneath it. */
+.table-wrap {
+  max-height: 460px;
+  overflow: auto;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+}
+
+.data-table th,
+.data-table td {
+  padding: var(--sp-2) var(--sp-3);
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.data-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--surface-2);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.data-table tbody tr:last-child th,
+.data-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.data-table tbody tr:hover {
+  background: var(--surface-2);
+}
+
+/* Figures only line up if they are tabular and right-aligned. Scoped under
+   .data-table so this beats the left alignment set on every cell above --
+   a bare .data-table__num would lose to .data-table td on specificity. */
+.data-table .data-table__num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Monospaced, so a trailing space or a lookalike character is visible. */
+.data-table__term {
+  font-family: var(--font-mono);
+  overflow-wrap: break-word;
+}
+
+.data-table__meter {
+  width: 30%;
+  min-width: 80px;
+}
+
+/* The bar's width is set inline from the data: it is a value, not styling. */
+.data-table__bar {
+  display: block;
+  height: 8px;
+  min-width: 2px;
+  background: var(--accent);
+  border-radius: var(--r-full);
+}
+
+/* On a narrow screen the bar is the first thing to go -- the figure beside it
+   says the same thing in less room. */
+@media (max-width: 520px) {
+  .data-table__meter,
+  .data-table thead th.data-table__meter {
+    display: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   11. DROPZONE (image and PDF tools)
+   -------------------------------------------------------------------------- */
+.dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  padding: var(--sp-7) var(--sp-4);
+  text-align: center;
+  color: var(--text-muted);
+  background: var(--bg);
+  border: 2px dashed var(--border-strong);
+  border-radius: var(--r-md);
+  cursor: pointer;
+  transition: border-color var(--t-fast) var(--ease),
+    background-color var(--t-fast) var(--ease);
+}
+
+.dropzone:hover,
+.dropzone:focus-visible {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+/* Toggled by JS on dragenter / dragleave. */
+.dropzone.is-dragging {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.dropzone__icon {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.dropzone__title {
+  font-size: var(--fs-base);
+  font-weight: 600;
+  color: var(--text);
+}
+
+.dropzone__hint {
+  font-size: var(--fs-xs);
+  color: var(--text-faint);
+}
+
+/* Thumbnails of picked files */
+.file-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: var(--sp-3);
+  margin-top: var(--sp-4);
+  padding: 0;
+  list-style: none;
+}
+
+.file-card {
+  position: relative;
+  padding: var(--sp-2);
+  font-size: var(--fs-xs);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  overflow: hidden;
+}
+
+.file-card__thumb {
+  width: 100%;
+  height: 82px;
+  margin-bottom: var(--sp-2);
+  object-fit: cover;
+  border-radius: var(--r-sm);
+  background: var(--bg);
+}
+
+.file-card__name {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text);
+}
+
+.file-card__size {
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --------------------------------------------------------------------------
+   12. ALERTS AND NOTES
+   Errors explain what happened and how to fix it — never just "invalid".
+   -------------------------------------------------------------------------- */
+.tool-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  margin-bottom: var(--sp-4);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--text-faint);
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.tool-alert:last-child {
+  margin-bottom: 0;
+}
+
+.tool-alert__icon {
+  flex: none;
+  line-height: 1.4;
+}
+
+.tool-alert--info {
+  border-left-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.tool-alert--success {
+  border-left-color: var(--success);
+  background: var(--success-soft);
+}
+
+.tool-alert--warning {
+  border-left-color: var(--warning);
+  background: var(--warning-soft);
+}
+
+.tool-alert--error {
+  border-left-color: var(--danger);
+  background: var(--danger-soft);
+}
+
+.tool-alert[hidden] {
+  display: none;
+}
+
+/* Small print under a panel — how the tool works, privacy note, limits. */
+.tool-note {
+  margin-top: var(--sp-5);
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+}
+
+.tool-note strong {
+  color: var(--text);
+}
+
+/* --------------------------------------------------------------------------
+   13. SUPPORTING CONTENT (below the tool itself)
+   -------------------------------------------------------------------------- */
+.tool-info {
+  margin-top: var(--sp-7);
+  padding-top: var(--sp-6);
+  border-top: 1px solid var(--border);
+}
+
+.tool-info h2 {
+  font-size: var(--fs-xl);
+}
+
+.tool-info h3 {
+  font-size: var(--fs-base);
+  margin-top: var(--sp-5);
+}
+
+/* The measure is capped here rather than on .tool-info itself, so headings
+   can still run the full width while body copy stays readable. A tool using
+   .tool-shell--wide gets a 1200px shell, which would otherwise stretch these
+   explanatory paragraphs well past a comfortable line length. */
+.tool-info p,
+.tool-info li {
+  max-width: 72ch;
+  color: var(--text-muted);
+}
+
+/* Back / next navigation at the foot of a tool page. */
+.tool-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  justify-content: space-between;
+  margin-top: var(--sp-6);
+  padding-top: var(--sp-5);
+  border-top: 1px solid var(--border);
+}
+
+/* --------------------------------------------------------------------------
+   14. RESPONSIVE
+   -------------------------------------------------------------------------- */
+@media (max-width: 640px) {
+  .tool-head__icon {
+    width: 44px;
+    height: 44px;
+    font-size: 1.4rem;
+  }
+
+  .tool-head__title {
+    font-size: var(--fs-xl);
+  }
+
+  .tool-head__desc {
+    font-size: var(--fs-base);
+  }
+
+  .panel__body {
+    padding: var(--sp-3);
+  }
+
+  .stat-grid {
+    grid-template-columns: repeat(auto-fit, minmax(104px, 1fr));
+  }
+
+  .stat {
+    padding: var(--sp-3) var(--sp-2);
+  }
+
+  .stat__value {
+    font-size: var(--fs-xl);
+  }
+
+  .dropzone {
+    padding: var(--sp-5) var(--sp-3);
+  }
+
+  /* Full-width buttons stack more predictably than wrapped inline ones. */
+  .tool-actions .btn {
+    flex: 1 1 100%;
+  }
+
+  .tool-actions__spacer {
+    margin-left: 0;
+  }
+
+  .tool-nav .btn {
+    flex: 1 1 100%;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   15. PRINT
+   -------------------------------------------------------------------------- */
+@media print {
+  .tool-actions,
+  .dropzone,
+  .tool-nav,
+  .breadcrumb {
+    display: none !important;
+  }
+
+  .panel {
+    border-color: #999;
+    box-shadow: none;
+  }
+
+  /* Scroll containers have to open up on paper or only the first screenful
+     of a long result is printed. */
+  .output--tall,
+  .table-wrap {
+    max-height: none;
+    overflow: visible;
+  }
+}

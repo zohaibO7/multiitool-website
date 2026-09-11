@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en" data-base="">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MultiTool — 58 free browser tools for text, images, PDFs and code</title>
+<meta name="description" content="58 free online tools in one place: word counter, case converter, QR and password generators, calculators, unit and colour converters, image and PDF tools, JSON formatter and more. Everything runs in your browser.">
+<meta name="theme-color" content="#1e1e2f">
+<link rel="canonical" href="index.html">
+<link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+
+<!-- Apply the saved theme BEFORE first paint so dark mode does not flash
+     white on load. Must stay in sync with THEME_KEY in common.js.
+     This block belongs in the <head> of every page. -->
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem('multitool-theme');
+      if (!t) {
+        t = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark' : 'light';
+      }
+      document.documentElement.setAttribute('data-theme', t);
+    } catch (e) { /* private mode — fall back to light */ }
+  })();
+</script>
+
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<!-- Navbar injected by common.js → MT.renderHeader() -->
+<header class="site-header" id="site-header"></header>
+
+<main class="site-main" id="main">
+  <div class="container">
+
+    <!-- ================================================================
+         HERO + SEARCH
+         ================================================================ -->
+    <section class="hero">
+      <span class="hero__eyebrow"><span aria-hidden="true">⚡</span> 58 tools, all free</span>
+      <h1 class="hero__title">Every small tool, in one place</h1>
+      <p class="hero__lead">Counters, converters, generators, calculators and developer
+        utilities. Everything runs in your browser — nothing you type or upload leaves your
+        computer.</p>
+
+      <div class="search">
+        <span class="search__icon" aria-hidden="true">🔍</span>
+        <input id="tool-search" class="search__input" type="search"
+               placeholder="Search 58 tools — try “json”, “image” or “timer”" autocomplete="off"
+               aria-label="Search tools" aria-describedby="search-help">
+        <button class="search__clear" type="button" hidden aria-label="Clear search">✕</button>
+      </div>
+      <p class="search__hint" id="search-help">Press <span class="kbd">/</span> to search from
+        anywhere, <span class="kbd">Enter</span> to open the first result, then
+        <span class="kbd">↑</span> <span class="kbd">↓</span> to move through the grid</p>
+    </section>
+
+    <!-- ================================================================
+         CATEGORY FILTER + FULL TOOL GRID
+         Every tool is a real link in the HTML, so the directory works with
+         JavaScript switched off. Search and filtering enhance it.
+         ================================================================ -->
+    <div id="all-tools">
+
+      <div class="filter-bar" role="group" aria-label="Filter tools by category">
+        <button class="chip is-active" type="button" data-filter="all" aria-pressed="true">All 58</button>
+        <button class="chip" type="button" data-filter="text-tools" aria-pressed="false"><span aria-hidden="true">✏️</span> Text</button>
+        <button class="chip" type="button" data-filter="generators" aria-pressed="false"><span aria-hidden="true">⚡</span> Generators</button>
+        <button class="chip" type="button" data-filter="calculators" aria-pressed="false"><span aria-hidden="true">🧮</span> Calculators</button>
+        <button class="chip" type="button" data-filter="converters" aria-pressed="false"><span aria-hidden="true">🔄</span> Converters</button>
+        <button class="chip" type="button" data-filter="image-tools" aria-pressed="false"><span aria-hidden="true">🖼️</span> Image</button>
+        <button class="chip" type="button" data-filter="pdf-tools" aria-pressed="false"><span aria-hidden="true">📄</span> PDF</button>
+        <button class="chip" type="button" data-filter="developer-tools" aria-pressed="false"><span aria-hidden="true">💻</span> Developer</button>
+        <button class="chip" type="button" data-filter="fun-utility" aria-pressed="false"><span aria-hidden="true">🎲</span> Fun</button>
+      </div>
+
+      <div class="list-toolbar">
+        <p class="result-count" id="result-count" role="status" aria-live="polite">Showing all 58 tools</p>
+
+        <div class="sort-control">
+          <label class="sort-control__label" for="tool-sort">Sort</label>
+          <select class="sort-select" id="tool-sort">
+            <option value="default">By category</option>
+            <option value="az">Name: A to Z</option>
+            <option value="za">Name: Z to A</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- ============================================================
+           TEXT TOOLS — 10
+           ============================================================ -->
+      <section class="tool-section" id="cat-text-tools" data-category-section="text-tools">
+        <div class="section-head">
+          <h2 class="section-title"><span class="section-title__icon" aria-hidden="true">✏️</span> Text Tools</h2>
+          <span class="section-count">10 tools</span>
+        </div>
+        <div class="tool-grid">
+
+          <a class="tool-card" href="tools/word-counter/index.html" data-tool
+             data-name="Word Counter" data-category="text-tools"
+             data-keywords="count words characters sentences paragraphs reading time length">
+            <span class="tool-card__icon" aria-hidden="true">🔢</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Word Counter</h3>
+              <span class="tool-card__desc">Count words, characters, sentences and reading time as you type.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/case-converter/index.html" data-tool
+             data-name="Case Converter" data-category="text-tools"
+             data-keywords="uppercase lowercase title sentence camel snake kebab capitalise">
+            <span class="tool-card__icon" aria-hidden="true">🔠</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Case Converter</h3>
+              <span class="tool-card__desc">Switch text between upper, lower, title, camel and snake case.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/text-reverser/index.html" data-tool
+             data-name="Text Reverser" data-category="text-tools"
+             data-keywords="reverse backwards flip mirror invert order characters words lines">
+            <span class="tool-card__icon" aria-hidden="true">🔁</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Text Reverser</h3>
+              <span class="tool-card__desc">Reverse text by character, by word or line by line.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/duplicate-line-remover/index.html" data-tool
+             data-name="Duplicate Line Remover" data-category="text-tools"
+             data-keywords="duplicate remove unique dedupe lines repeated clean list">
+            <span class="tool-card__icon" aria-hidden="true">🧹</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Duplicate Line Remover</h3>
+              <span class="tool-card__desc">Strip repeated lines from a list and keep only the unique ones.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/lorem-ipsum-generator/index.html" data-tool
+             data-name="Lorem Ipsum Generator" data-category="text-tools"
+             data-keywords="lorem ipsum placeholder dummy filler text paragraphs mockup">
+            <span class="tool-card__icon" aria-hidden="true">📄</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Lorem Ipsum Generator</h3>
+              <span class="tool-card__desc">Generate placeholder paragraphs, sentences or words for mockups.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/text-to-speech/index.html" data-tool
+             data-name="Text to Speech" data-category="text-tools"
+             data-keywords="speech speak read aloud voice tts audio narrate listen">
+            <span class="tool-card__icon" aria-hidden="true">🔊</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Text to Speech</h3>
+              <span class="tool-card__desc">Read any text aloud using the voices installed on your device.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/word-frequency-counter/index.html" data-tool
+             data-name="Word Frequency Counter" data-category="text-tools"
+             data-keywords="frequency count common words ranking occurrences density repeated">
+            <span class="tool-card__icon" aria-hidden="true">📊</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Word Frequency Counter</h3>
+              <span class="tool-card__desc">See which words appear most often, ranked by how many times.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/text-diff-checker/index.html" data-tool
+             data-name="Text Diff Checker" data-category="text-tools"
+             data-keywords="diff compare difference changes two texts side by side">
+            <span class="tool-card__icon" aria-hidden="true">🔍</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Text Diff Checker</h3>
+              <span class="tool-card__desc">Compare two blocks of text and highlight exactly what changed.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/palindrome-checker/index.html" data-tool
+             data-name="Palindrome Checker" data-category="text-tools"
+             data-keywords="palindrome reverse same backwards check word phrase symmetry">
+            <span class="tool-card__icon" aria-hidden="true">↔️</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Palindrome Checker</h3>
+              <span class="tool-card__desc">Check whether a word or phrase reads the same backwards.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/text-sorter/index.html" data-tool
+             data-name="Text Sorter" data-category="text-tools"
+             data-keywords="sort alphabetical order lines a to z reverse random length list">
+            <span class="tool-card__icon" aria-hidden="true">🔤</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Text Sorter</h3>
+              <span class="tool-card__desc">Sort lines alphabetically, by length or into a random order.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+        </div>
+      </section>
+
+      <!-- ============================================================
+           GENERATORS — 10
+           ============================================================ -->
+      <section class="tool-section" id="cat-generators" data-category-section="generators">
+        <div class="section-head">
+          <h2 class="section-title"><span class="section-title__icon" aria-hidden="true">⚡</span> Generators</h2>
+          <span class="section-count">10 tools</span>
+        </div>
+        <div class="tool-grid">
+
+          <a class="tool-card" href="tools/qr-generator/index.html" data-tool
+             data-name="QR Generator" data-category="generators"
+             data-keywords="qr code barcode scan link url share download wifi">
+            <span class="tool-card__icon" aria-hidden="true">📱</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">QR Generator</h3>
+              <span class="tool-card__desc">Turn a link or any text into a QR code you can download.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/password-generator/index.html" data-tool
+             data-name="Password Generator" data-category="generators"
+             data-keywords="password random secure strong symbols numbers length passphrase">
+            <span class="tool-card__icon" aria-hidden="true">🔐</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Password Generator</h3>
+              <span class="tool-card__desc">Build a strong random password with the length and characters you pick.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/uuid-generator/index.html" data-tool
+             data-name="UUID Generator" data-category="generators"
+             data-keywords="uuid guid unique identifier v4 random id bulk key">
+            <span class="tool-card__icon" aria-hidden="true">🆔</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">UUID Generator</h3>
+              <span class="tool-card__desc">Generate version 4 UUIDs, one at a time or in bulk.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/barcode-generator/index.html" data-tool
+             data-name="Barcode Generator" data-category="generators"
+             data-keywords="barcode code128 ean upc scan product label sku">
+            <span class="tool-card__icon" aria-hidden="true">🎫</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Barcode Generator</h3>
+              <span class="tool-card__desc">Create a scannable barcode from numbers or text.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/random-number-generator/index.html" data-tool
+             data-name="Random Number Generator" data-category="generators"
+             data-keywords="random number range integer pick lottery draw unique">
+            <span class="tool-card__icon" aria-hidden="true">🎯</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Random Number Generator</h3>
+              <span class="tool-card__desc">Pick random numbers in any range, with or without repeats.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/fake-name-generator/index.html" data-tool
+             data-name="Fake Name Generator" data-category="generators"
+             data-keywords="fake name person profile test data dummy random sample">
+            <span class="tool-card__icon" aria-hidden="true">👤</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Fake Name Generator</h3>
+              <span class="tool-card__desc">Generate placeholder names and profiles for testing forms.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/password-strength-checker/index.html" data-tool
+             data-name="Password Strength Checker" data-category="generators"
+             data-keywords="password strength check secure weak entropy crack score safe">
+            <span class="tool-card__icon" aria-hidden="true">🛡️</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Password Strength Checker</h3>
+              <span class="tool-card__desc">Test how strong a password is and see how to improve it.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/coin-flip-dice-roller/index.html" data-tool
+             data-name="Coin Flip &amp; Dice Roller" data-category="generators"
+             data-keywords="coin flip dice roll d6 d20 random heads tails decide">
+            <span class="tool-card__icon" aria-hidden="true">🎲</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Coin Flip &amp; Dice Roller</h3>
+              <span class="tool-card__desc">Flip a coin or roll dice when you need a quick decision.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/username-generator/index.html" data-tool
+             data-name="Username Generator" data-category="generators"
+             data-keywords="username handle nickname gamertag random name profile">
+            <span class="tool-card__icon" aria-hidden="true">🔖</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Username Generator</h3>
+              <span class="tool-card__desc">Come up with memorable usernames and handles.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/slug-generator/index.html" data-tool
+             data-name="Slug Generator" data-category="generators"
+             data-keywords="slug url permalink seo hyphen kebab clean title link">
+            <span class="tool-card__icon" aria-hidden="true">🔗</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Slug Generator</h3>
+              <span class="tool-card__desc">Turn a headline into a clean, readable URL slug.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+        </div>
+      </section>
+
+      <!-- ============================================================
+           CALCULATORS — 10
+           ============================================================ -->
+      <section class="tool-section" id="cat-calculators" data-category-section="calculators">
+        <div class="section-head">
+          <h2 class="section-title"><span class="section-title__icon" aria-hidden="true">🧮</span> Calculators</h2>
+          <span class="section-count">10 tools</span>
+        </div>
+        <div class="tool-grid">
+
+          <a class="tool-card" href="tools/age-calculator/index.html" data-tool
+             data-name="Age Calculator" data-category="calculators"
+             data-keywords="age birthday date years months days old born">
+            <span class="tool-card__icon" aria-hidden="true">🎂</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Age Calculator</h3>
+              <span class="tool-card__desc">Work out an exact age in years, months and days from a birth date.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/percentage-calculator/index.html" data-tool
+             data-name="Percentage Calculator" data-category="calculators"
+             data-keywords="percentage percent increase decrease change of ratio difference">
+            <span class="tool-card__icon" aria-hidden="true">💯</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Percentage Calculator</h3>
+              <span class="tool-card__desc">Solve percentage increase, decrease and “what percent of” questions.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/bmi-calculator/index.html" data-tool
+             data-name="BMI Calculator" data-category="calculators"
+             data-keywords="bmi body mass index weight height health metric imperial">
+            <span class="tool-card__icon" aria-hidden="true">⚖️</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">BMI Calculator</h3>
+              <span class="tool-card__desc">Work out body mass index from height and weight, metric or imperial.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/loan-emi-calculator/index.html" data-tool
+             data-name="Loan EMI Calculator" data-category="calculators"
+             data-keywords="loan emi mortgage monthly payment interest amortisation instalment">
+            <span class="tool-card__icon" aria-hidden="true">🏦</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Loan EMI Calculator</h3>
+              <span class="tool-card__desc">Calculate monthly loan payments, total interest and repayment.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/gpa-calculator/index.html" data-tool
+             data-name="GPA Calculator" data-category="calculators"
+             data-keywords="gpa grade point average credits cgpa marks school university">
+            <span class="tool-card__icon" aria-hidden="true">🎓</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">GPA Calculator</h3>
+              <span class="tool-card__desc">Work out grade point average across courses and credit hours.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/interest-calculator/index.html" data-tool
+             data-name="Interest Calculator" data-category="calculators"
+             data-keywords="interest simple compound savings principal rate growth investment">
+            <span class="tool-card__icon" aria-hidden="true">📈</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Interest Calculator</h3>
+              <span class="tool-card__desc">Compare simple and compound interest over any period.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/tip-calculator/index.html" data-tool
+             data-name="Tip Calculator" data-category="calculators"
+             data-keywords="tip gratuity bill split restaurant service percentage share">
+            <span class="tool-card__icon" aria-hidden="true">🧾</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Tip Calculator</h3>
+              <span class="tool-card__desc">Split a bill and work out the tip per person.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/discount-calculator/index.html" data-tool
+             data-name="Discount Calculator" data-category="calculators"
+             data-keywords="discount sale price off percentage savings deal reduced">
+            <span class="tool-card__icon" aria-hidden="true">🏷️</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Discount Calculator</h3>
+              <span class="tool-card__desc">Find the sale price and how much a discount actually saves.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/date-difference-calculator/index.html" data-tool
+             data-name="Date Difference Calculator" data-category="calculators"
+             data-keywords="date difference between days weeks months duration countdown">
+            <span class="tool-card__icon" aria-hidden="true">📅</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Date Difference Calculator</h3>
+              <span class="tool-card__desc">Count the days, weeks and months between two dates.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/timezone-meeting-planner/index.html" data-tool
+             data-name="Timezone Meeting Planner" data-category="calculators"
+             data-keywords="timezone meeting planner schedule across zones utc world call">
+            <span class="tool-card__icon" aria-hidden="true">🌍</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Timezone Meeting Planner</h3>
+              <span class="tool-card__desc">Find a meeting time that works across several time zones.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+        </div>
+      </section>
+
+      <!-- ============================================================
+           CONVERTERS — 7
+           ============================================================ -->
+      <section class="tool-section" id="cat-converters" data-category-section="converters">
+        <div class="section-head">
+          <h2 class="section-title"><span class="section-title__icon" aria-hidden="true">🔄</span> Converters</h2>
+          <span class="section-count">7 tools</span>
+        </div>
+        <div class="tool-grid">
+
+          <a class="tool-card" href="tools/unit-converter/index.html" data-tool
+             data-name="Unit Converter" data-category="converters"
+             data-keywords="unit convert length weight temperature metric imperial volume area speed">
+            <span class="tool-card__icon" aria-hidden="true">📐</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Unit Converter</h3>
+              <span class="tool-card__desc">Convert length, weight, temperature, area, volume and speed.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/color-converter/index.html" data-tool
+             data-name="Color Converter" data-category="converters"
+             data-keywords="color colour hex rgb hsl cmyk convert picker palette">
+            <span class="tool-card__icon" aria-hidden="true">🎨</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Color Converter</h3>
+              <span class="tool-card__desc">Convert colours between HEX, RGB, HSL and CMYK.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/timezone-converter/index.html" data-tool
+             data-name="Timezone Converter" data-category="converters"
+             data-keywords="timezone time convert utc gmt zone world clock city">
+            <span class="tool-card__icon" aria-hidden="true">🕐</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Timezone Converter</h3>
+              <span class="tool-card__desc">Convert a time from one time zone to another.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/number-to-words/index.html" data-tool
+             data-name="Number to Words" data-category="converters"
+             data-keywords="number words spell write text cheque amount currency say">
+            <span class="tool-card__icon" aria-hidden="true">🔡</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Number to Words</h3>
+              <span class="tool-card__desc">Spell any number out in words, for cheques and contracts.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/roman-numeral-converter/index.html" data-tool
+             data-name="Roman Numeral Converter" data-category="converters"
+             data-keywords="roman numeral convert number latin xiv mmxxv ancient">
+            <span class="tool-card__icon" aria-hidden="true">🏛️</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Roman Numeral Converter</h3>
+              <span class="tool-card__desc">Convert between Roman numerals and ordinary numbers.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/binary-hex-octal-converter/index.html" data-tool
+             data-name="Binary, Hex &amp; Octal Converter" data-category="converters"
+             data-keywords="binary hex octal decimal base convert radix bits number system">
+            <span class="tool-card__icon" aria-hidden="true">💾</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Binary, Hex &amp; Octal Converter</h3>
+              <span class="tool-card__desc">Convert numbers between binary, octal, decimal and hex.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/ascii-art-generator/index.html" data-tool
+             data-name="ASCII Art Generator" data-category="converters"
+             data-keywords="ascii art text banner figlet font letters draw big">
+            <span class="tool-card__icon" aria-hidden="true">🎭</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">ASCII Art Generator</h3>
+              <span class="tool-card__desc">Turn short text into a large ASCII art banner.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+        </div>
+      </section>
+
+      <!-- ============================================================
+           IMAGE TOOLS — 4
+           ============================================================ -->
+      <section class="tool-section" id="cat-image-tools" data-category-section="image-tools">
+        <div class="section-head">
+          <h2 class="section-title"><span class="section-title__icon" aria-hidden="true">🖼️</span> Image Tools</h2>
+          <span class="section-count">4 tools</span>
+        </div>
+        <div class="tool-grid">
+
+          <a class="tool-card" href="tools/image-compressor/index.html" data-tool
+             data-name="Image Compressor" data-category="image-tools"
+             data-keywords="compress image size reduce optimise jpeg png quality smaller">
+            <span class="tool-card__icon" aria-hidden="true">🗜️</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Image Compressor</h3>
+              <span class="tool-card__desc">Shrink an image's file size while keeping it looking good.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/image-resizer/index.html" data-tool
+             data-name="Image Resizer" data-category="image-tools"
+             data-keywords="resize image dimensions scale crop width height pixels">
+            <span class="tool-card__icon" aria-hidden="true">📏</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Image Resizer</h3>
+              <span class="tool-card__desc">Resize an image to exact dimensions, or scale it by percentage.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/image-format-converter/index.html" data-tool
+             data-name="Image Format Converter" data-category="image-tools"
+             data-keywords="convert image format png jpg jpeg webp change type">
+            <span class="tool-card__icon" aria-hidden="true">🔄</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Image Format Converter</h3>
+              <span class="tool-card__desc">Convert images between PNG, JPEG and WebP.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/meme-generator/index.html" data-tool
+             data-name="Meme Generator" data-category="image-tools"
+             data-keywords="meme caption text image funny top bottom overlay">
+            <span class="tool-card__icon" aria-hidden="true">😂</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Meme Generator</h3>
+              <span class="tool-card__desc">Add top and bottom captions to an image and download it.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+        </div>
+      </section>
+
+      <!-- ============================================================
+           PDF TOOLS — 2
+           ============================================================ -->
+      <section class="tool-section" id="cat-pdf-tools" data-category-section="pdf-tools">
+        <div class="section-head">
+          <h2 class="section-title"><span class="section-title__icon" aria-hidden="true">📄</span> PDF Tools</h2>
+          <span class="section-count">2 tools</span>
+        </div>
+        <div class="tool-grid">
+
+          <a class="tool-card" href="tools/image-to-pdf/index.html" data-tool
+             data-name="Image to PDF" data-category="pdf-tools"
+             data-keywords="image pdf convert combine photos document pages scan">
+            <span class="tool-card__icon" aria-hidden="true">📑</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Image to PDF</h3>
+              <span class="tool-card__desc">Combine several images into a single PDF document.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/pdf-merge-split/index.html" data-tool
+             data-name="PDF Merge &amp; Split" data-category="pdf-tools"
+             data-keywords="pdf merge split combine join extract pages separate">
+            <span class="tool-card__icon" aria-hidden="true">✂️</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">PDF Merge &amp; Split</h3>
+              <span class="tool-card__desc">Merge PDFs together, or pull out just the pages you need.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+        </div>
+      </section>
+
+      <!-- ============================================================
+           DEVELOPER TOOLS — 10
+           ============================================================ -->
+      <section class="tool-section" id="cat-developer-tools" data-category-section="developer-tools">
+        <div class="section-head">
+          <h2 class="section-title"><span class="section-title__icon" aria-hidden="true">💻</span> Developer Tools</h2>
+          <span class="section-count">10 tools</span>
+        </div>
+        <div class="tool-grid">
+
+          <a class="tool-card" href="tools/json-formatter/index.html" data-tool
+             data-name="JSON Formatter" data-category="developer-tools"
+             data-keywords="json format pretty print validate minify indent api parse">
+            <span class="tool-card__icon" aria-hidden="true">🗃️</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">JSON Formatter</h3>
+              <span class="tool-card__desc">Pretty-print, validate and minify JSON, with errors pinpointed.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/base64-encoder-decoder/index.html" data-tool
+             data-name="Base64 Encoder / Decoder" data-category="developer-tools"
+             data-keywords="base64 encode decode string binary data uri btoa atob">
+            <span class="tool-card__icon" aria-hidden="true">🔃</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Base64 Encoder / Decoder</h3>
+              <span class="tool-card__desc">Encode text to Base64 and decode it back again.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/regex-tester/index.html" data-tool
+             data-name="Regex Tester" data-category="developer-tools"
+             data-keywords="regex regular expression test match pattern replace groups flags">
+            <span class="tool-card__icon" aria-hidden="true">⚙️</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Regex Tester</h3>
+              <span class="tool-card__desc">Test a regular expression against sample text and see every match.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/markdown-to-html/index.html" data-tool
+             data-name="Markdown to HTML" data-category="developer-tools"
+             data-keywords="markdown html convert md preview render readme">
+            <span class="tool-card__icon" aria-hidden="true">📝</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Markdown to HTML</h3>
+              <span class="tool-card__desc">Convert Markdown into clean HTML you can copy straight out.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/code-minifier/index.html" data-tool
+             data-name="Code Minifier" data-category="developer-tools"
+             data-keywords="minify compress code css js html whitespace comments smaller">
+            <span class="tool-card__icon" aria-hidden="true">📦</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Code Minifier</h3>
+              <span class="tool-card__desc">Strip whitespace and comments from CSS, JavaScript or HTML.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/css-gradient-generator/index.html" data-tool
+             data-name="CSS Gradient Generator" data-category="developer-tools"
+             data-keywords="css gradient linear radial background color code generator stops">
+            <span class="tool-card__icon" aria-hidden="true">🌈</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">CSS Gradient Generator</h3>
+              <span class="tool-card__desc">Design a CSS gradient visually and copy the code.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/box-shadow-generator/index.html" data-tool
+             data-name="Box Shadow Generator" data-category="developer-tools"
+             data-keywords="css box shadow generator preview blur spread offset inset">
+            <span class="tool-card__icon" aria-hidden="true">🪟</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Box Shadow Generator</h3>
+              <span class="tool-card__desc">Build a CSS box-shadow with a live preview, then copy the code.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/html-entity-encoder-decoder/index.html" data-tool
+             data-name="HTML Entity Encoder / Decoder" data-category="developer-tools"
+             data-keywords="html entity encode decode escape special characters ampersand">
+            <span class="tool-card__icon" aria-hidden="true">🧩</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">HTML Entity Encoder / Decoder</h3>
+              <span class="tool-card__desc">Escape HTML entities, or turn them back into characters.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/cron-expression-generator/index.html" data-tool
+             data-name="Cron Expression Generator" data-category="developer-tools"
+             data-keywords="cron expression schedule crontab job timer generator explain">
+            <span class="tool-card__icon" aria-hidden="true">⏰</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Cron Expression Generator</h3>
+              <span class="tool-card__desc">Build a cron schedule and read back what it means in plain English.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/placeholder-image-generator/index.html" data-tool
+             data-name="Placeholder Image Generator" data-category="developer-tools"
+             data-keywords="placeholder image dummy size color mockup filler download">
+            <span class="tool-card__icon" aria-hidden="true">🖼️</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Placeholder Image Generator</h3>
+              <span class="tool-card__desc">Generate a placeholder image at any size, in any colours.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+        </div>
+      </section>
+
+      <!-- ============================================================
+           FUN / UTILITY TOOLS — 5
+           ============================================================ -->
+      <section class="tool-section" id="cat-fun-utility" data-category-section="fun-utility">
+        <div class="section-head">
+          <h2 class="section-title"><span class="section-title__icon" aria-hidden="true">🎲</span> Fun / Utility Tools</h2>
+          <span class="section-count">5 tools</span>
+        </div>
+        <div class="tool-grid">
+
+          <a class="tool-card" href="tools/typing-speed-test/index.html" data-tool
+             data-name="Typing Speed Test" data-category="fun-utility"
+             data-keywords="typing speed test wpm accuracy practice keyboard words per minute">
+            <span class="tool-card__icon" aria-hidden="true">⌨️</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Typing Speed Test</h3>
+              <span class="tool-card__desc">Measure your typing speed and accuracy in words per minute.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/countdown-timer/index.html" data-tool
+             data-name="Countdown Timer" data-category="fun-utility"
+             data-keywords="countdown timer alarm minutes event alert clock deadline">
+            <span class="tool-card__icon" aria-hidden="true">⏳</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Countdown Timer</h3>
+              <span class="tool-card__desc">Count down to any moment, with an alert when it hits zero.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/stopwatch/index.html" data-tool
+             data-name="Stopwatch" data-category="fun-utility"
+             data-keywords="stopwatch timer lap split elapsed start stop reset">
+            <span class="tool-card__icon" aria-hidden="true">⏱️</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Stopwatch</h3>
+              <span class="tool-card__desc">Time anything, with lap splits and a running total.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/random-quote-generator/index.html" data-tool
+             data-name="Random Quote Generator" data-category="fun-utility"
+             data-keywords="quote random inspiration saying wisdom generator shuffle">
+            <span class="tool-card__icon" aria-hidden="true">💬</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Random Quote Generator</h3>
+              <span class="tool-card__desc">Pull up a random quote whenever you need one.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a class="tool-card" href="tools/random-team-picker/index.html" data-tool
+             data-name="Random Team Picker" data-category="fun-utility"
+             data-keywords="team picker random groups shuffle split names divide sides">
+            <span class="tool-card__icon" aria-hidden="true">👥</span>
+            <div class="tool-card__body">
+              <h3 class="tool-card__title">Random Team Picker</h3>
+              <span class="tool-card__desc">Shuffle a list of names into evenly sized random teams.</span>
+            </div>
+            <span class="tool-card__arrow" aria-hidden="true">→</span>
+          </a>
+
+        </div>
+      </section>
+
+      <!-- Sorting by name dissolves the category grouping, so the cards are
+           moved into this single flat grid by main.js and the eight category
+           sections are hidden. Moving back to "By category" returns every
+           card to its original section. Deliberately has NO
+           data-category-section attribute, so the per-section hide logic
+           skips it. -->
+      <section class="tool-section" id="flat-results" hidden>
+        <div class="section-head">
+          <h2 class="section-title"><span class="section-title__icon" aria-hidden="true">🔤</span> Sorted by name</h2>
+          <span class="section-count" id="flat-count"></span>
+        </div>
+        <div class="tool-grid" id="flat-grid"></div>
+      </section>
+
+      <!-- Shown by main.js when a search or filter matches nothing -->
+      <div class="empty-state" id="no-results" hidden>
+        <span class="empty-state__icon" aria-hidden="true">🔍</span>
+        <h2 class="empty-state__title">No tools match that</h2>
+        <p>Try a shorter word, or check a different category. Every tool is searchable by name,
+          by what it does, and by its category.</p>
+        <button class="btn btn--primary" type="button" id="reset-filters">Clear search and filters</button>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<!-- Footer injected by common.js → MT.renderFooter() -->
+<footer class="site-footer" id="site-footer"></footer>
+
+<script src="assets/js/common.js" defer></script>
+<script src="assets/js/main.js" defer></script>
+</body>
+</html>

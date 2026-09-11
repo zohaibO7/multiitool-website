@@ -1,0 +1,1285 @@
+/* ==========================================================================
+   MultiTool — assets/css/style.css
+   --------------------------------------------------------------------------
+   GLOBAL stylesheet. Loaded by every single page (homepage + all 58 tools).
+
+   Owns: design tokens, reset, utilities, navbar, footer, hero, category
+         sections, card grid, buttons, chips, search, toasts.
+
+   Does NOT own: tool-page internals (input panels, output boxes, stat grids).
+                 Those live in tool.css.
+
+   RULE: never hardcode a colour anywhere in this project. Use the tokens
+   below. That is what lets one dark-mode toggle restyle all 59 pages.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. DESIGN TOKENS — light theme (default)
+   -------------------------------------------------------------------------- */
+:root {
+  color-scheme: light;
+
+  /* Brand — these two values come straight from the project spec */
+  --brand-navy: #1e1e2f;
+  --accent: #4a4ae0;
+  --accent-hover: #3b3bc9;
+  --accent-active: #3131ad;
+  --on-accent: #ffffff;
+  --accent-soft: rgba(74, 74, 224, 0.10);
+  --accent-ring: rgba(74, 74, 224, 0.40);
+
+  /* Surfaces */
+  --bg: #f7f8fc;
+  --bg-alt: #eef0f8;
+  --surface: #ffffff;
+  --surface-2: #f4f5fa;
+  --border: #e4e6ef;
+  --border-strong: #cfd3e2;
+
+  /* Text */
+  --text: #1a1a2e;
+  --text-muted: #5c5c72;
+  --text-faint: #8b8ba3;
+
+  /* Site header — deliberately dark in BOTH themes, per the spec's
+     "dark navbar (#1e1e2f)" instruction. */
+  --header-bg: #1e1e2f;
+  --header-text: #ffffff;
+  --header-muted: #b9b9cc;
+  --header-hover-bg: rgba(255, 255, 255, 0.09);
+  --header-border: rgba(255, 255, 255, 0.10);
+
+  /* Semantic feedback */
+  --success: #16a34a;
+  --success-soft: rgba(22, 163, 74, 0.12);
+  --warning: #b45309;
+  --warning-soft: rgba(180, 83, 9, 0.12);
+  --danger: #dc2626;
+  --danger-soft: rgba(220, 38, 38, 0.12);
+
+  /* Typography — system stack, so there is nothing to download */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas,
+    "Liberation Mono", monospace;
+
+  --fs-xs: 0.8125rem;
+  --fs-sm: 0.875rem;
+  --fs-base: 1rem;
+  --fs-lg: 1.125rem;
+  --fs-xl: 1.375rem;
+  --fs-2xl: 1.75rem;
+  --fs-3xl: clamp(2rem, 1.4rem + 2.4vw, 2.75rem);
+
+  --lh-tight: 1.25;
+  --lh-snug: 1.45;
+  --lh-base: 1.65;
+
+  /* Spacing — 4px base */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.5rem;
+  --sp-6: 2rem;
+  --sp-7: 3rem;
+  --sp-8: 4rem;
+
+  /* Radius */
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 16px;
+  --r-full: 999px;
+
+  /* Elevation */
+  --sh-1: 0 1px 2px rgba(16, 18, 40, 0.06);
+  --sh-2: 0 4px 14px rgba(16, 18, 40, 0.08);
+  --sh-3: 0 14px 32px rgba(16, 18, 40, 0.16);
+
+  /* Motion */
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --t-fast: 120ms;
+  --t-med: 220ms;
+
+  /* Layout */
+  --container: 1200px;
+  --container-narrow: 880px;
+  --header-h: 64px;
+}
+
+/* --------------------------------------------------------------------------
+   2. DESIGN TOKENS — dark theme override
+   Only the values that change. Everything else inherits from :root.
+   -------------------------------------------------------------------------- */
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* Accent lifts one step so it still passes contrast on a near-black bg.
+     The brand #4a4ae0 is untouched in light mode. */
+  --accent: #6d6df0;
+  --accent-hover: #8484f5;
+  --accent-active: #9a9af8;
+  --accent-soft: rgba(109, 109, 240, 0.15);
+  --accent-ring: rgba(109, 109, 240, 0.50);
+
+  --bg: #14141f;
+  --bg-alt: #191926;
+  --surface: #1e1e2f;
+  --surface-2: #262638;
+  --border: #2e2e45;
+  --border-strong: #3d3d58;
+
+  --text: #ececf5;
+  --text-muted: #a0a0b8;
+  --text-faint: #7a7a94;
+
+  --success: #4ade80;
+  --success-soft: rgba(74, 222, 128, 0.14);
+  --warning: #fbbf24;
+  --warning-soft: rgba(251, 191, 36, 0.14);
+  --danger: #f87171;
+  --danger-soft: rgba(248, 113, 113, 0.14);
+
+  --sh-1: 0 1px 2px rgba(0, 0, 0, 0.40);
+  --sh-2: 0 4px 14px rgba(0, 0, 0, 0.45);
+  --sh-3: 0 14px 32px rgba(0, 0, 0, 0.55);
+}
+
+/* --------------------------------------------------------------------------
+   3. RESET / BASE
+   -------------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--header-h) + var(--sp-4));
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--fs-base);
+  line-height: var(--lh-base);
+  color: var(--text);
+  background-color: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0 0 var(--sp-3);
+  line-height: var(--lh-tight);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--text);
+}
+
+h1 { font-size: var(--fs-3xl); }
+h2 { font-size: var(--fs-2xl); }
+h3 { font-size: var(--fs-xl); }
+h4 { font-size: var(--fs-lg); }
+
+p {
+  margin: 0 0 var(--sp-4);
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color var(--t-fast) var(--ease);
+}
+
+a:hover {
+  color: var(--accent-hover);
+  text-decoration: underline;
+}
+
+img,
+svg,
+canvas,
+video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+code,
+kbd,
+samp,
+pre {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+
+code {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 0.1em 0.4em;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: var(--sp-6) 0;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+/* --------------------------------------------------------------------------
+   4. ACCESSIBILITY BASELINE
+   -------------------------------------------------------------------------- */
+
+/* One consistent focus ring everywhere. Never remove this without a
+   replacement — it is the only way to navigate the site by keyboard. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--r-sm);
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  top: var(--sp-2);
+  left: var(--sp-2);
+  z-index: 200;
+  padding: var(--sp-2) var(--sp-4);
+  background: var(--accent);
+  color: var(--on-accent);
+  border-radius: var(--r-sm);
+  font-weight: 600;
+  transform: translateY(-200%);
+  transition: transform var(--t-fast) var(--ease);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+  text-decoration: none;
+  color: var(--on-accent);
+}
+
+/* Respect an OS-level request for less animation. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .tool-card:hover {
+    transform: none !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   5. LAYOUT PRIMITIVES
+   -------------------------------------------------------------------------- */
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--sp-4);
+}
+
+.container--narrow {
+  max-width: var(--container-narrow);
+}
+
+/* The single main content region on every page. */
+.site-main {
+  flex: 1 0 auto;
+  padding-block: var(--sp-6) var(--sp-8);
+}
+
+/* --------------------------------------------------------------------------
+   6. SITE HEADER / NAVBAR
+   Markup is injected by common.js — see MT.renderHeader().
+   -------------------------------------------------------------------------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  /* Reserve the bar's height before common.js injects the contents, so the
+     page does not jump on load. */
+  min-height: var(--header-h);
+  background: var(--header-bg);
+  border-bottom: 1px solid var(--header-border);
+}
+
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  min-height: var(--header-h);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--header-text);
+  margin-right: auto;
+  padding-block: var(--sp-2);
+}
+
+.brand:hover {
+  color: var(--header-text);
+  text-decoration: none;
+}
+
+.brand__mark {
+  width: 28px;
+  height: 28px;
+  flex: none;
+  border-radius: var(--r-sm);
+}
+
+.brand__text .brand__accent {
+  color: #8f8ff7; /* fixed light tint: sits on the dark navbar in both themes */
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+}
+
+.site-nav__link {
+  display: inline-block;
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--r-sm);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--header-muted);
+  transition: background-color var(--t-fast) var(--ease),
+    color var(--t-fast) var(--ease);
+}
+
+.site-nav__link:hover {
+  background: var(--header-hover-bg);
+  color: var(--header-text);
+  text-decoration: none;
+}
+
+/* Set by common.js on the link matching the current page. */
+.site-nav__link.is-current {
+  color: var(--header-text);
+  background: var(--header-hover-bg);
+}
+
+.site-header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+/* Icon buttons in the header (theme toggle, mobile menu). */
+.header-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  flex: none;
+  padding: 0;
+  font-size: var(--fs-lg);
+  line-height: 1;
+  color: var(--header-text);
+  background: transparent;
+  border: 1px solid var(--header-border);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  transition: background-color var(--t-fast) var(--ease),
+    border-color var(--t-fast) var(--ease);
+}
+
+.header-btn:hover {
+  background: var(--header-hover-bg);
+  border-color: rgba(255, 255, 255, 0.24);
+}
+
+.nav-toggle {
+  display: none; /* shown under 900px — see media query at the end */
+}
+
+/* --------------------------------------------------------------------------
+   7. FOOTER
+   Markup is injected by common.js — see MT.renderFooter().
+   -------------------------------------------------------------------------- */
+.site-footer {
+  flex: none;
+  margin-top: auto;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding-block: var(--sp-6) var(--sp-5);
+  font-size: var(--fs-sm);
+}
+
+.site-footer__grid {
+  display: grid;
+  grid-template-columns: minmax(220px, 1.4fr) 2fr;
+  gap: var(--sp-6);
+  align-items: start;
+}
+
+.site-footer__about p {
+  color: var(--text-muted);
+  margin-bottom: 0;
+  max-width: 42ch;
+}
+
+.site-footer__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: var(--sp-2);
+}
+
+.site-footer__brand:hover {
+  text-decoration: none;
+  color: var(--text);
+}
+
+.site-footer__heading {
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-faint);
+  margin-bottom: var(--sp-3);
+}
+
+.site-footer__links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--sp-2) var(--sp-4);
+}
+
+.site-footer__links a {
+  color: var(--text-muted);
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--sp-2);
+}
+
+.site-footer__links a:hover {
+  color: var(--accent);
+}
+
+.site-footer__count {
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.site-footer__bottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  margin-top: var(--sp-6);
+  padding-top: var(--sp-4);
+  border-top: 1px solid var(--border);
+  color: var(--text-faint);
+  font-size: var(--fs-xs);
+}
+
+/* --------------------------------------------------------------------------
+   8. HERO
+   -------------------------------------------------------------------------- */
+.hero {
+  padding-block: var(--sp-7) var(--sp-6);
+  text-align: center;
+}
+
+.hero__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-4);
+  padding: var(--sp-1) var(--sp-3);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border-radius: var(--r-full);
+}
+
+.hero__title {
+  margin-bottom: var(--sp-4);
+}
+
+.hero__lead {
+  max-width: 60ch;
+  margin-inline: auto;
+  margin-bottom: var(--sp-5);
+  font-size: var(--fs-lg);
+  color: var(--text-muted);
+}
+
+/* --------------------------------------------------------------------------
+   9. SEARCH (homepage tool search)
+   -------------------------------------------------------------------------- */
+.search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  max-width: 560px;
+  margin-inline: auto;
+}
+
+.search__icon {
+  position: absolute;
+  left: var(--sp-4);
+  font-size: var(--fs-base);
+  color: var(--text-faint);
+  pointer-events: none;
+}
+
+.search__input {
+  width: 100%;
+  padding: var(--sp-3) var(--sp-8) var(--sp-3) 2.75rem;
+  font-family: inherit;
+  font-size: var(--fs-base);
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-full);
+  box-shadow: var(--sh-1);
+  transition: border-color var(--t-fast) var(--ease),
+    box-shadow var(--t-fast) var(--ease);
+}
+
+.search__input::placeholder {
+  color: var(--text-faint);
+}
+
+.search__input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-ring);
+}
+
+/* Hide the browser's own clear button; we ship our own. */
+.search__input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.search__clear {
+  position: absolute;
+  right: var(--sp-3);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-full);
+  cursor: pointer;
+  transition: color var(--t-fast) var(--ease),
+    background-color var(--t-fast) var(--ease);
+}
+
+.search__clear:hover {
+  color: var(--text);
+  background: var(--border);
+}
+
+.search__hint {
+  margin: var(--sp-3) 0 0;
+  font-size: var(--fs-xs);
+  color: var(--text-faint);
+  text-align: center;
+}
+
+.kbd {
+  display: inline-block;
+  min-width: 1.4em;
+  padding: 0.1em 0.4em;
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  text-align: center;
+  color: var(--text-muted);
+  background: var(--surface-2);
+  border: 1px solid var(--border-strong);
+  border-bottom-width: 2px;
+  border-radius: var(--r-sm);
+}
+
+/* --------------------------------------------------------------------------
+   10. FILTER CHIPS
+   -------------------------------------------------------------------------- */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--sp-2);
+  margin-block: var(--sp-5);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-4);
+  font-family: inherit;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-full);
+  cursor: pointer;
+  transition: color var(--t-fast) var(--ease),
+    background-color var(--t-fast) var(--ease),
+    border-color var(--t-fast) var(--ease);
+}
+
+.chip:hover {
+  color: var(--text);
+  border-color: var(--accent);
+}
+
+.chip.is-active {
+  color: var(--on-accent);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+/* --------------------------------------------------------------------------
+   11. CATEGORY SECTIONS
+   -------------------------------------------------------------------------- */
+.tool-section {
+  margin-bottom: var(--sp-7);
+}
+
+.tool-section:last-child {
+  margin-bottom: 0;
+}
+
+.section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-4);
+  padding-bottom: var(--sp-3);
+  border-bottom: 1px solid var(--border);
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  margin: 0;
+  font-size: var(--fs-xl);
+}
+
+.section-title__icon {
+  font-size: 1.1em;
+  line-height: 1;
+}
+
+.section-count {
+  margin-left: auto;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --------------------------------------------------------------------------
+   12. TOOL CARD GRID
+   auto-fit columns, per the spec's responsive instruction.
+   -------------------------------------------------------------------------- */
+.tool-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--sp-4);
+}
+
+.tool-card {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  padding: var(--sp-4);
+  color: inherit;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  box-shadow: var(--sh-1);
+  transition: transform var(--t-med) var(--ease),
+    box-shadow var(--t-med) var(--ease),
+    border-color var(--t-med) var(--ease);
+}
+
+/* The lift on hover the spec asks for: shadow + transform. */
+.tool-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--sh-3);
+  border-color: var(--accent);
+  text-decoration: none;
+  color: inherit;
+}
+
+.tool-card:hover .tool-card__title {
+  color: var(--accent);
+}
+
+.tool-card:hover .tool-card__arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.tool-card__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  flex: none;
+  font-size: 1.35rem;
+  line-height: 1;
+  background: var(--accent-soft);
+  border-radius: var(--r-sm);
+}
+
+.tool-card__body {
+  display: block;
+  min-width: 0; /* lets long words wrap instead of overflowing the grid */
+}
+
+/* This is an <h3> so the page has a real heading outline. The margin and
+   font-size resets below undo the h3 defaults — keep them if you ever
+   change the element. */
+.tool-card__title {
+  display: block;
+  margin: 0 0 var(--sp-1);
+  font-size: var(--fs-base);
+  font-weight: 700;
+  /* Snug rather than tight: several tool names wrap onto a second line. */
+  line-height: var(--lh-snug);
+  color: var(--text);
+  transition: color var(--t-fast) var(--ease);
+}
+
+.tool-card__desc {
+  display: block;
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+  color: var(--text-muted);
+}
+
+.tool-card__arrow {
+  flex: none;
+  margin-left: auto;
+  align-self: center;
+  color: var(--accent);
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: opacity var(--t-med) var(--ease),
+    transform var(--t-med) var(--ease);
+}
+
+/* Hidden by the search/filter in main.js.
+
+   These rules are not redundant with the browser's own `[hidden] { display:
+   none }`. That rule lives in the user-agent stylesheet, so ANY author-origin
+   `display` declaration beats it no matter how weak the selector — author
+   origin always wins over UA origin, specificity never enters into it. So
+   every element that sets its own `display` and is also toggled by JS needs
+   an explicit `[hidden]` rule here, or it will stay visible. */
+.tool-card[hidden],
+.tool-section[hidden],
+.search__clear[hidden] {
+  display: none;
+}
+
+/* Same trap, one level down: `.btn` sets `display: inline-flex` below, so a
+   button a tool page shows and hides with the `hidden` attribute -- the
+   Text Sorter's "Shuffle again", for one -- would otherwise stay on screen. */
+.btn[hidden] {
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   13. BUTTONS
+   Global, so tool pages reuse them rather than defining their own.
+   -------------------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-5);
+  font-family: inherit;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  transition: background-color var(--t-fast) var(--ease),
+    border-color var(--t-fast) var(--ease),
+    color var(--t-fast) var(--ease),
+    transform var(--t-fast) var(--ease);
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn:disabled:hover,
+.btn[aria-disabled="true"]:hover {
+  border-color: var(--border-strong);
+  color: var(--text);
+}
+
+.btn--primary {
+  color: var(--on-accent);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.btn--primary:hover {
+  color: var(--on-accent);
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+
+.btn--primary:disabled:hover,
+.btn--primary[aria-disabled="true"]:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+
+.btn--ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--text-muted);
+}
+
+.btn--ghost:hover {
+  background: var(--surface-2);
+  border-color: transparent;
+  color: var(--text);
+}
+
+.btn--danger {
+  color: var(--danger);
+  border-color: var(--border-strong);
+}
+
+.btn--danger:hover {
+  color: var(--danger);
+  background: var(--danger-soft);
+  border-color: var(--danger);
+}
+
+.btn--sm {
+  padding: var(--sp-2) var(--sp-3);
+  font-size: var(--fs-xs);
+}
+
+.btn--lg {
+  padding: var(--sp-3) var(--sp-6);
+  font-size: var(--fs-base);
+}
+
+.btn--block {
+  width: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   14. BADGES
+   -------------------------------------------------------------------------- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  padding: 0.15em 0.6em;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  border-radius: var(--r-full);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+}
+
+.badge--accent {
+  background: var(--accent-soft);
+  border-color: transparent;
+  color: var(--accent);
+}
+
+.badge--success {
+  background: var(--success-soft);
+  border-color: transparent;
+  color: var(--success);
+}
+
+.badge--warning {
+  background: var(--warning-soft);
+  border-color: transparent;
+  color: var(--warning);
+}
+
+.badge--danger {
+  background: var(--danger-soft);
+  border-color: transparent;
+  color: var(--danger);
+}
+
+/* --------------------------------------------------------------------------
+   15. EMPTY STATE
+   -------------------------------------------------------------------------- */
+.empty-state {
+  padding: var(--sp-7) var(--sp-4);
+  text-align: center;
+  background: var(--surface);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--r-md);
+}
+
+.empty-state__icon {
+  display: block;
+  margin-bottom: var(--sp-3);
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.empty-state__title {
+  margin-bottom: var(--sp-2);
+  font-size: var(--fs-lg);
+}
+
+.empty-state p {
+  max-width: 44ch;
+  margin-inline: auto;
+  margin-bottom: var(--sp-4);
+  color: var(--text-muted);
+}
+
+.result-count {
+  margin: 0 0 var(--sp-4);
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+/* --------------------------------------------------------------------------
+   15b. LIST TOOLBAR
+   Result count on the left, sort control on the right. Sits between the
+   category chips and the first tool grid.
+   -------------------------------------------------------------------------- */
+.list-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-5);
+}
+
+/* Inside the toolbar the count reads left-aligned and the toolbar owns the
+   spacing beneath, so cancel the standalone rules above. */
+.list-toolbar .result-count {
+  margin: 0;
+  text-align: left;
+}
+
+.sort-control {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-left: auto;
+}
+
+.sort-control__label {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* Deliberately keeps the browser's native select appearance. Because both
+   themes declare `color-scheme`, the dropdown arrow and the popup list are
+   drawn correctly in light and dark without a custom SVG arrow. */
+.sort-select {
+  padding: var(--sp-2) var(--sp-3);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-sm);
+  background-color: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: var(--fs-sm);
+  cursor: pointer;
+  transition: border-color var(--t-fast) var(--ease);
+}
+
+.sort-select:hover {
+  border-color: var(--accent);
+}
+
+/* On a narrow screen let the control take the full width rather than
+   squeezing against the count. */
+@media (max-width: 480px) {
+  .sort-control {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .sort-select {
+    flex: 1;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   15c. SEARCH MATCH HIGHLIGHT
+   Applied by main.js to the matched run inside a card title/description.
+   -------------------------------------------------------------------------- */
+mark {
+  background-color: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 700;
+  padding: 0 1px;
+  border-radius: 3px;
+}
+
+/* Match the card's own corner radius — the global :focus-visible ring uses
+   the smaller --r-sm, which looks wrong on a card this size. Cards receive
+   focus programmatically during arrow-key navigation. */
+.tool-card:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: var(--r-md);
+}
+
+/* --------------------------------------------------------------------------
+   16. TOASTS
+   Created on demand by MT.toast() in common.js.
+   -------------------------------------------------------------------------- */
+.toast-region {
+  position: fixed;
+  right: var(--sp-4);
+  bottom: var(--sp-4);
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  pointer-events: none;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  max-width: min(360px, calc(100vw - var(--sp-6)));
+  padding: var(--sp-3) var(--sp-4);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--r-sm);
+  box-shadow: var(--sh-3);
+  animation: toast-in var(--t-med) var(--ease);
+}
+
+.toast--success { border-left-color: var(--success); }
+.toast--error   { border-left-color: var(--danger); }
+
+.toast.is-leaving {
+  animation: toast-out var(--t-med) var(--ease) forwards;
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes toast-out {
+  to { opacity: 0; transform: translateY(8px); }
+}
+
+/* --------------------------------------------------------------------------
+   17. RESPONSIVE
+   Mobile-first: the rules above are the small-screen baseline where they
+   differ. These queries adapt upward and downward at 900px / 640px.
+   -------------------------------------------------------------------------- */
+
+/* Tablet and below — collapse the nav into a toggled panel. */
+@media (max-width: 900px) {
+  .nav-toggle {
+    display: inline-flex;
+  }
+
+  .site-nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: var(--sp-2);
+    background: var(--header-bg);
+    border-bottom: 1px solid var(--header-border);
+    box-shadow: var(--sh-3);
+    display: none;
+  }
+
+  .site-header {
+    position: sticky;
+  }
+
+  .site-header__inner {
+    position: relative;
+  }
+
+  .site-nav.is-open {
+    display: flex;
+  }
+
+  .site-nav__link {
+    padding: var(--sp-3) var(--sp-4);
+  }
+}
+
+/* Phones */
+@media (max-width: 640px) {
+  :root {
+    --sp-7: 2.25rem;
+    --sp-8: 3rem;
+  }
+
+  .hero {
+    padding-block: var(--sp-6) var(--sp-5);
+    text-align: left;
+  }
+
+  .hero__lead {
+    margin-inline: 0;
+  }
+
+  .search {
+    margin-inline: 0;
+  }
+
+  .filter-bar {
+    justify-content: flex-start;
+    /* Let the chip row scroll sideways rather than stack 9 rows deep. */
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: var(--sp-2);
+    scrollbar-width: thin;
+  }
+
+  .chip {
+    flex: none;
+  }
+
+  .tool-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .section-count {
+    margin-left: 0;
+  }
+
+  .site-footer__grid {
+    grid-template-columns: 1fr;
+    gap: var(--sp-5);
+  }
+
+  .toast-region {
+    left: var(--sp-4);
+    right: var(--sp-4);
+  }
+
+  .toast {
+    max-width: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   18. PRINT
+   -------------------------------------------------------------------------- */
+@media print {
+  .site-header,
+  .site-footer,
+  .filter-bar,
+  .search,
+  .toast-region {
+    display: none !important;
+  }
+
+  body {
+    background: #fff;
+    color: #000;
+  }
+}
